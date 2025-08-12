@@ -1,7 +1,9 @@
 # Hang Meas Mobile Ticketing App Project Plan
 
 ## Project Overview
-Mobile application for selling event and concert tickets organized by Hang Meas, with special integration for XFactor Cambodia.
+Mobile application for selling event and concert tickets organized by Hang Meas, with integrated support for multiple talent shows including XFactor Cambodia, Cambodia's Got Talent, and The Voice Cambodia.
+
+> **Multi-Show Framework**: This app uses a unified talent shows framework to support multiple entertainment formats. See [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md) for the complete architecture.
 
 ## Core Features
 
@@ -15,7 +17,8 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 - Browse upcoming events and concerts
 - Search and filter (by date, artist, venue, price)
 - Featured events carousel
-- Event categories (concerts, XFactor shows, special events)
+- Event categories (concerts, talent shows, special events)
+- Multi-show support (XFactor, Cambodia's Got Talent, The Voice)
 
 ### 3. Ticketing System
 - Real-time seat selection (for seated venues)
@@ -24,12 +27,21 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 - Secure payment integration
 - Booking confirmation via email/SMS
 
-### 4. XFactor Cambodia Integration
-- Live voting during shows
-- Contestant profiles and performances
-- Behind-the-scenes content
+### 4. Talent Shows Integration
+- **Multi-show platform** supporting:
+  - XFactor Cambodia (singing competition with categories)
+  - Cambodia's Got Talent (variety acts with Golden Buzzer)
+  - The Voice Cambodia (blind auditions with coach teams)
+- Live voting during shows (show-specific rules)
+- Contestant profiles and journey tracking
+- Behind-the-scenes content for all shows
 - Season pass/bundle tickets
-- Fan engagement features
+- Cross-show fan engagement features
+
+> **Implementation Guides**: 
+> - XFactor: [XFACTOR_COMPLETE_GUIDE.md](../talent-shows/xfactor/XFACTOR_COMPLETE_GUIDE.md)
+> - Cambodia's Got Talent: [CGT_IMPLEMENTATION_GUIDE.md](../talent-shows/cgt/CGT_IMPLEMENTATION_GUIDE.md)
+> - The Voice: [VOICE_IMPLEMENTATION_GUIDE.md](../talent-shows/voice/VOICE_IMPLEMENTATION_GUIDE.md)
 
 ### 5. Payment Integration
 - Multiple payment methods:
@@ -64,7 +76,7 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 
 ### Infrastructure
 - Cloud hosting (AWS/GCP/Azure)
-- CDN for media content
+- CDN for media content (see [STREAMING_INFRASTRUCTURE.md](../technical/STREAMING_INFRASTRUCTURE.md#cdn-strategy))
 - Load balancer for high traffic events
 - Auto-scaling for ticket launches
 
@@ -86,10 +98,13 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 - Sales analytics
 - Event performance metrics
 
-### 4. Live Streaming (for XFactor)
-- Video streaming platform integration
-- Real-time voting system
-- Chat/comment features
+### 4. Live Streaming (for Talent Shows)
+> **Detailed streaming infrastructure**: See [STREAMING_INFRASTRUCTURE.md](../technical/STREAMING_INFRASTRUCTURE.md) for comprehensive technical implementation
+
+- Video streaming platform integration for all shows
+- Real-time voting system (configurable per show)
+- Chat/comment features with show-specific contexts
+- Multi-show streaming support
 
 ## Development Phases
 
@@ -107,11 +122,14 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 - User profiles
 - Search and filters
 
-### Phase 3: XFactor Integration (2 months)
-- Voting system
-- Live streaming integration
-- Contestant profiles
-- Special XFactor ticket bundles
+### Phase 3: Talent Shows Integration (3 months)
+- Multi-show voting system (see [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md))
+- Live streaming integration (see [STREAMING_INFRASTRUCTURE.md](../technical/STREAMING_INFRASTRUCTURE.md))
+- Contestant profiles and show-specific features
+- XFactor categories and mentorship system
+- Cambodia's Got Talent golden buzzer feature
+- The Voice blind auditions and coach teams
+- Cross-show ticket bundles and packages
 
 ### Phase 4: Advanced Features (2 months)
 - Loyalty program
@@ -132,8 +150,8 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 - Service fees on ticket sales
 - Premium features (early access, VIP perks)
 - Sponsored content/ads
-- XFactor voting packages
-- Merchandise integration
+- Multi-show voting packages (XFactor, CGT, Voice)
+- Show-specific merchandise integration
 
 ## Success Metrics
 - Monthly active users
@@ -141,16 +159,18 @@ Mobile application for selling event and concert tickets organized by Hang Meas,
 - App store ratings
 - Customer retention
 - Revenue per user
-- XFactor engagement metrics
+- Multi-show engagement metrics (XFactor, CGT, Voice)
+- Cross-show audience analytics
 
 ## Team Requirements
-- Project Manager
-- Mobile Developers (2-3)
-- Backend Developers (2)
-- UI/UX Designer
-- QA Engineer
-- DevOps Engineer
-- Product Owner
+- Technical Lead ($3,500/month) - Architecture & Team Leadership
+- Project Manager ($1,250/month) - Project Coordination
+- Senior Developers (2 @ $1,200/month) - Core Development
+- UI/UX Designer ($650/month) - Design & User Experience
+- DevOps Engineer ($1,500/month) - Infrastructure & Deployment
+- QA Engineer ($800/month) - Quality Assurance
+- Junior Developer ($450/month) - Development Support
+Total Team Cost: $126.6K/year
 
 ## Estimated Timeline
 Total: 9-10 months for full feature set
@@ -160,7 +180,7 @@ Total: 9-10 months for full feature set
 
 ## Budget Considerations
 - Development team costs
-- Infrastructure (hosting, CDN)
+- Infrastructure (hosting, CDN - see [STREAMING_INFRASTRUCTURE.md](./STREAMING_INFRASTRUCTURE.md#cost-analysis))
 - Third-party services (SMS, payments)
 - Marketing and promotion
 - App store fees

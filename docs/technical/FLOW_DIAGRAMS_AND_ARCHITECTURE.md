@@ -1,5 +1,7 @@
 # Flow Diagrams and System Architecture
 
+> **Multi-Show Support**: This architecture supports multiple talent shows (XFactor, Cambodia's Got Talent, The Voice Cambodia) through a unified framework. See [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md) for show-specific implementations.
+
 ## 1. Complete User Registration Flow
 
 ### Flow Diagram: New User Registration
@@ -221,9 +223,11 @@ User Interaction:
     └─────────┘ └─────────┘
 ```
 
-## 3. XFactor Live Voting System Architecture
+## 3. Multi-Show Live Voting System Architecture
 
-### Real-Time Voting Infrastructure
+> **Universal Voting Framework**: Supports XFactor categories, CGT golden buzzer mechanics, and Voice coach teams through configurable voting rules.
+
+### Multi-Show Real-Time Voting Infrastructure
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   TV Broadcast                      │
@@ -327,24 +331,24 @@ User Interaction:
 │      Recommendation Engine          │
 ├─────────────────────────────────────┤
 │ 1. Collaborative Filtering          │
-│    - Users who bought X also Y     │
+│    - Users who bought X also Y      │
 │                                     │
-│ 2. Content-Based Filtering         │
-│    - Similar artists/genres        │
+│ 2. Content-Based Filtering          │
+│    - Similar artists/genres         │
 │                                     │
-│ 3. Trending Algorithm              │
-│    - Velocity of sales             │
-│    - Social media buzz             │
+│ 3. Trending Algorithm               │
+│    - Velocity of sales              │
+│    - Social media buzz              │
 │                                     │
-│ 4. Location-Based                  │
-│    - Nearby venues                 │
-│    - Travel time consideration     │
+│ 4. Location-Based                   │
+│    - Nearby venues                  │
+│    - Travel time consideration      │
 └──────────────┬──────────────────────┘
                │
                ▼
 ┌─────────────────────────────────────┐
 │        Scoring & Ranking            │
-│  Score = 0.3*CF + 0.3*CBF +        │
+│  Score = 0.3*CF + 0.3*CBF +         │
 │          0.2*Trend + 0.2*Location   │
 └──────────────┬──────────────────────┘
                │
@@ -363,8 +367,8 @@ User Interaction:
 ### QR Code Generation and Validation
 ```
 Ticket Purchase                    Event Entry
-     │                                 │
-     ▼                                 ▼
+       │                              │
+       ▼                              ▼
 ┌─────────────┐                ┌─────────────┐
 │  Generate   │                │  Scan QR    │
 │  Unique ID  │                │   Code      │
@@ -443,42 +447,42 @@ User Selects ABA PayWay
 
 ### Wing Money Flow
 ```
-┌────────────────────────────┐
+┌───────────────────────-─────┐
 │   User Enters Wing Number   │
 │      012 345 678            │
-└─────────────┬──────────────┘
+└─────────────┬──────────-────┘
               │
               ▼
-┌────────────────────────────┐
+┌──────────────────────────-──┐
 │  System Sends Wing Request  │
 │  - Merchant: Hang Meas      │
 │  - Amount: $52.50           │
 │  - To: 012345678            │
-└─────────────┬──────────────┘
+└─────────────┬─────────────-─┘
               │
               ▼
-┌────────────────────────────┐
+┌─────────────────────-───────┐
 │    User Receives SMS        │
-│ "Pay $52.50 to Hang Meas?  │
+│ "Pay $52.50 to Hang Meas?   │
 │  Reply with PIN"            │
-└─────────────┬──────────────┘
+└─────────────┬────────────-──┘
               │
               ▼
-┌────────────────────────────┐
+┌───────────────────────-─────┐
 │    User Replies: 1234       │
-└─────────────┬──────────────┘
+└─────────────┬──────────-────┘
               │
               ▼
-┌────────────────────────────┐
+┌────────────────────-────────┐
 │  Wing Confirms Payment      │
 │  Webhook to Hang Meas       │
-└─────────────┬──────────────┘
+└─────────────┬───────-───────┘
               │
               ▼
-┌────────────────────────────┐
+┌──────────────────────-──────┐
 │    Tickets Issued           │
 │    SMS Confirmation         │
-└────────────────────────────┘
+└───────────────────────-─────┘
 ```
 
 ## 7. Push Notification Strategy
@@ -530,28 +534,28 @@ Priority Levels:
 
 ### Real-Time Sales Dashboard
 ```
-┌─────────────────────────────────────────────────┐
+┌────────────────────────────────────────-─────────┐
 │             Live Sales Monitor                   │
-├─────────────────────────────────────────────────┤
-│                                                 │
-│  Current Minute: $1,234  ▲23% vs last hour      │
-│  ████████████████████████ 78 transactions      │
-│                                                 │
-│  Last Hour Performance                          │
-│  20:00 ████████████ $12,340                    │
-│  21:00 ██████████████████ $18,450              │
-│  22:00 ████████ $8,230                         │
-│                                                 │
-│  Top Selling Events (Live)                      │
-│  1. XFactor Final    ████████ 234 tickets/min  │
-│  2. NYE Concert      █████ 123 tickets/min     │
-│  3. Comedy Show      ██ 45 tickets/min         │
-│                                                 │
-│  System Health                                  │
-│  API Response: 89ms  ✓                         │
-│  Payment Success: 97.3%                        │
-│  Active Users: 3,421                           │
-└─────────────────────────────────────────────────┘
+├─────────────────────────────────────────-────────┤
+│                                                  │
+│  Current Minute: $1,234  ▲23% vs last hour       │
+│  ████████████████████████ 78 transactions        │
+│                                                  │
+│  Last Hour Performance                           │
+│  20:00 ████████████ $12,340                      │
+│  21:00 ██████████████████ $18,450                │
+│  22:00 ████████ $8,230                           │
+│                                                  │
+│  Top Selling Events (Live)                       │
+│  1. XFactor Final    ████████ 234 tickets/min    │
+│  2. NYE Concert      █████ 123 tickets/min       │
+│  3. Comedy Show      ██ 45 tickets/min           │
+│                                                  │
+│  System Health                                   │
+│  API Response: 89ms  ✓                           │
+│  Payment Success: 97.3%                          │
+│  Active Users: 3,421                             │
+└────────────────────────────────────────────────-─┘
 ```
 
 ## 9. Error Recovery Mechanisms
@@ -612,7 +616,7 @@ Seat Holding Logic:
             ▼
 ┌────────────────────────┐
 │  Local Storage         │
-│  - SQLite DB          │
+│  - SQLite DB           │
 │  - Encrypted tickets   │
 │  - Event cache         │
 │  - Action queue        │

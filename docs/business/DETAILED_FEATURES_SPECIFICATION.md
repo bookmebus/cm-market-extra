@@ -1,10 +1,12 @@
 # Detailed Features Specification - Hang Meas Ticketing App
 
+> **Multi-Show Platform**: This application supports multiple talent shows through a unified framework. See [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md) for the complete multi-show architecture.
+
 ## Table of Contents
 1. [User Management System](#1-user-management-system)
 2. [Event Discovery & Browsing](#2-event-discovery--browsing)
 3. [Ticket Purchase Flow](#3-ticket-purchase-flow)
-4. [XFactor Live Voting](#4-xfactor-live-voting)
+4. [Multi-Show Live Voting](#4-multi-show-live-voting)
 5. [Payment Processing](#5-payment-processing)
 6. [Digital Ticket Management](#6-digital-ticket-management)
 7. [Push Notifications](#7-push-notifications)
@@ -78,7 +80,7 @@
         "new_events": true,
         "price_drops": true,
         "artist_updates": true,
-        "xfactor_voting": true
+        "talent_show_voting": true
       }
     },
     "loyalty_points": 1250,
@@ -95,16 +97,16 @@
 ├─────────────────────────┤
 │ Upcoming Events         │
 │                         │
-│ 🎤 Preap Sovath Concert│
-│ 📅 Dec 25, 2024 7:00PM │
-│ 🎫 2 VIP tickets       │
-│ 📍 Koh Pich Theatre    │
+│ 🎤 Preap Sovath Concert │
+│ 📅 Dec 25, 2024 7:00PM  │
+│ 🎫 2 VIP tickets        │
+│ 📍 Koh Pich Theatre     │
 │ [View Tickets]          │
 │                         │
-│ 🎭 XFactor Live Final   │
-│ 📅 Jan 15, 2025 8:00PM │
-│ 🎫 4 Standard tickets  │
-│ 📍 Olympic Stadium     │
+│ 🎭 Voice Cambodia Final │
+│ 📅 Jan 15, 2025 8:00PM  │
+│ 🎫 4 Standard tickets   │
+│ 📍 Olympic Stadium      │
 │ [View Tickets]          │
 ├─────────────────────────┤
 │ Past Events             │
@@ -124,15 +126,15 @@
 │ 🔍 Search events...     │
 ├─────────────────────────┤
 │ Featured This Week      │
-│ ┌───────┐ ┌───────┐    │
-│ │       │ │       │ ►  │
-│ │XFactor│ │Concert│    │
-│ │ Final │ │Sovath │    │
-│ └───────┘ └───────┘    │
+│ ┌───────┐ ┌───────┐     │
+│ │       │ │       │     │
+│ │XFactor│ │Concert│  ►  │
+│ │ Final │ │Sovath │     │
+│ └───────┘ └───────┘     │
 ├─────────────────────────┤
 │ Categories              │
-│ 🎤 Concerts  🎭 Shows   │
-│ 🎯 XFactor   🎉 Events  │
+│ 🎤 Concerts  🎭 Shows    │
+│ 🎭 Talent Shows 🎉 Events │
 ├─────────────────────────┤
 │ Upcoming Events         │
 │ ▼ December 2024         │
@@ -157,22 +159,25 @@
 │ Khmer New Year Concert  │
 │ Multiple Artists        │
 │                         │
-│ 📅 April 14-16, 2025   │
-│ 📍 Angkor Wat          │
-│ 💵 $10 - $100          │
+│ 📅 April 14-16, 2025    │
+│ 📍 Angkor Wat           │
+│ 💵 $10 - $100           │
 │                         │
-│ ⭐ 4.8 (234 reviews)   │
-│ 🔥 80% sold            │
+│ ⭐ 4.8 (234 reviews)    │
+│ 🔥 80% sold             │
 └─────────────────────────┘
 ```
 
-#### XFactor Category
-**Show Types:**
-- Auditions (Free admission)
-- Boot Camp Episodes
-- Live Shows (Ticketed)
-- Semi-Finals
-- Grand Final
+#### Talent Shows Category
+**Supported Shows:**
+- **XFactor Cambodia**: Singing competition with judge categories
+  - Auditions, Boot Camp, Six Chair Challenge, Live Shows, Final
+- **Cambodia's Got Talent**: Variety acts with Golden Buzzer
+  - Open Auditions, Judge Auditions, Semi-Finals, Finals
+- **The Voice Cambodia**: Blind auditions with coach teams
+  - Blind Auditions, Battles, Knockouts, Live Shows, Final
+
+> **Show-Specific Features**: Each show has unique voting rules and features detailed in [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md)
 
 ### 2.3 Search & Filter System
 
@@ -193,7 +198,7 @@
       "province": "Phnom Penh",
       "venues": ["Koh Pich Theatre", "Olympic Stadium"]
     },
-    "event_type": ["concert", "xfactor"],
+    "event_type": ["concert", "xfactor", "cgt", "voice"],
     "availability": "available_only",
     "language": "km", // Event language
     "features": [
@@ -210,6 +215,8 @@
 - "សុខ សុភា" (Artist name in Khmer)
 - "December concerts"
 - "XFactor voting night"
+- "Cambodia's Got Talent golden buzzer"
+- "Voice blind auditions"
 - "Events near me"
 
 ---
@@ -227,9 +234,9 @@
 │ Preap Sovath Live       │
 │ ⭐⭐⭐⭐⭐ (456)          │
 │                         │
-│ 📅 Dec 25, 2024        │
-│ ⏰ 7:00 PM - 10:00 PM  │
-│ 📍 Koh Pich Theatre    │
+│ 📅 Dec 25, 2024         │
+│ ⏰ 7:00 PM - 10:00 PM   │
+│ 📍 Koh Pich Theatre     │
 │                         │
 │ About This Event        │
 │ Cambodia's legendary    │
@@ -328,7 +335,7 @@ Legend:
 │ │ Wallet payment      │ │
 │ └─────────────────────┘ │
 ├─────────────────────────┤
-│ 💳 Cards               │
+│ 💳 Cards                │
 │ ┌─────────────────────┐ │
 │ │ Visa/Mastercard     │ │
 │ │ International cards │ │
@@ -338,14 +345,18 @@ Legend:
 
 ---
 
-## 4. XFactor Live Voting
+## 4. Multi-Show Live Voting
 
-### 4.1 Voting Interface During Live Show
+> **Framework Overview**: The voting system supports multiple talent shows with different rules and mechanics. See [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md) for detailed implementation.
 
-**Main Voting Screen:**
+### 4.1 Dynamic Voting Interface
+
+**The interface adapts based on the active show type:**
+
+#### XFactor Voting Screen:
 ```
 ┌─────────────────────────┐
-│ 🔴 LIVE - XFactor      │
+│ 🔴 LIVE - XFactor       │
 │ Semi-Final Round 2      │
 │ Voting closes in: 4:32  │
 ├─────────────────────────┤
@@ -353,15 +364,9 @@ Legend:
 │                         │
 │ ┌─────────────────────┐ │
 │ │ 👤 Contestant 1     │ │
-│ │ Dara - Phnom Penh   │ │
-│ │ Song: "អូនស្រលាញ់"  │ │
-│ │ [VOTE] ❤️ 23.5K    │ │
-│ └─────────────────────┘ │
-│ ┌─────────────────────┐ │
-│ │ 👤 Contestant 2     │ │
-│ │ Sophia - Siem Reap  │ │
-│ │ Song: "បទថ្មី"      │ │
-│ │ [VOTE] ❤️ 19.2K    │ │
+│ │ Dara - Boys Category │ │
+│ │ Song: "អូនស្រលាញ់"    │ │
+│ │ [VOTE] ❤️ 23.5K     │ │
 │ └─────────────────────┘ │
 │                         │
 │ Your Votes: 3/5 FREE    │
@@ -369,30 +374,79 @@ Legend:
 └─────────────────────────┘
 ```
 
-### 4.2 Vote Package Purchase
-
-**In-App Store:**
+#### Cambodia's Got Talent Voting:
 ```
 ┌─────────────────────────┐
-│ XFactor Vote Packages   │
+│ 🔴 LIVE - CGT Finals    │
+│ Voting closes in: 8:15  │
 ├─────────────────────────┤
-│ 🎯 Power Vote Bundle    │
+│ Vote for Your Favorite  │
+│                         │
+│ ┌─────────────────────┐ │
+│ │ 🎪 Magic Act        │ │
+│ │ Seila - Battambang  │ │
+│ │ 🏆 Golden Buzzer    │ │
+│ │ [VOTE] ⭐ 18.3K     │ │
+│ └─────────────────────┘ │
+│                         │
+│ Your Votes: 7/10 FREE   │
+│ [Buy More Votes]        │
+└─────────────────────────┘
+```
+
+#### The Voice Voting:
+```
+┌─────────────────────────┐
+│ 🔴 LIVE - Voice Final   │
+│ Voting closes in: 5:45  │
+├─────────────────────────┤
+│ Vote by Coach Teams     │
+│                         │
+│ ┌─────────────────────┐ │
+│ │ 🎤 Team Preap       │ │
+│ │ Kimly - Kandal      │ │
+│ │ Song: "ស្នេហាអើយ"     │ │
+│ │ [VOTE] 💙 15.7K     │ │
+│ └─────────────────────┘ │
+│                         │
+│ Instant Save Available  │
+│ [Buy More Votes]        │
+└─────────────────────────┘
+```
+
+### 4.2 Multi-Show Vote Packages
+
+**The vote packages adapt to the active show:**
+
+#### Universal Vote Store:
+```
+┌─────────────────────────┐
+│ Talent Show Voting      │
+│ Currently: XFactor Live │
+├─────────────────────────┤
+│ 🎯 Basic Package        │
+│ 20 votes                │
+│ $1.99 - All shows       │
+├─────────────────────────┤
+│ 🌟 Power Vote Bundle    │
 │ 50 votes + bonus 10     │
 │ $4.99 SAVE 20%          │
 │ [Most Popular]          │
 ├─────────────────────────┤
-│ 🌟 Super Fan Package    │
-│ 200 votes + bonus 50    │
+│ 💎 Super Fan Package    │
+│ 200 votes + bonuses     │
 │ $14.99 SAVE 30%         │
-│ + Exclusive content     │
-├─────────────────────────┤
-│ 💎 Ultimate Package     │
-│ 1000 votes              │
-│ $49.99 SAVE 40%         │
-│ + Meet finalist         │
-│ + Signed merchandise    │
+│ + Show-specific perks:  │
+│   • XFactor: Categories │
+│   • CGT: Golden predict │
+│   • Voice: Team loyalty │
 └─────────────────────────┘
 ```
+
+**Show-Specific Benefits:**
+- **XFactor**: Vote for entire categories, mentor content
+- **CGT**: Predict Golden Buzzer usage, act-type voting
+- **Voice**: Team packages, coach cam access
 
 ### 4.3 Voting Mechanics
 
@@ -416,11 +470,12 @@ Legend:
    - Confirmation SMS sent
    - Added to phone bill
 
-**Example Voting Flow:**
+**Universal Voting API:**
 ```javascript
-// User votes for contestant
-POST /api/v1/xfactor/vote
+// Multi-show voting endpoint
+POST /api/v1/shows/:showType/vote
 {
+  "show_type": "xfactor", // or "cgt", "voice"
   "contestant_id": "cont_123",
   "episode_id": "ep_sf2",
   "votes": [
@@ -429,18 +484,27 @@ POST /api/v1/xfactor/vote
       "count": 1
     }
   ],
+  "show_specific_data": {
+    "category": "boys", // XFactor specific
+    "coach_team": "preap" // Voice specific
+  },
   "timestamp": "2024-12-20T20:15:30Z",
   "device_fingerprint": "abc123..."
 }
 
-// Response
+// Universal Response Format
 {
   "success": true,
   "vote_id": "vote_789",
+  "show_type": "xfactor",
   "remaining_free_votes": 4,
   "contestant_total": 23501,
   "rank": 2,
-  "message": "Vote counted! Dara now has 23,501 votes"
+  "message": "Vote counted! Dara now has 23,501 votes",
+  "show_specific_result": {
+    "category_rank": 1, // XFactor
+    "team_position": 2   // Voice
+  }
 }
 ```
 
@@ -452,15 +516,15 @@ POST /api/v1/xfactor/vote
 │ Live Voting Results     │
 │ Updated every 30 sec    │
 ├─────────────────────────┤
-│ 1. 👑 Sophia           │
+│ 1. 👑 Sophia            │
 │    ████████████ 45.2%   │
 │    54,234 votes         │
 │                         │
-│ 2. 🥈 Dara             │
+│ 2. 🥈 Dara              │
 │    ████████ 38.1%       │
 │    45,678 votes         │
 │                         │
-│ 3. 🥉 Virak            │
+│ 3. 🥉 Virak             │
 │    ████ 16.7%           │
 │    20,012 votes         │
 │                         │
@@ -508,7 +572,7 @@ POST /api/v1/xfactor/vote
 │ Pay with Wing           │
 ├─────────────────────────┤
 │ Enter Wing Account      │
-│ 📱 +855 __ ___ ___     │
+│ 📱 +855 __ ___ ___      │
 │                         │
 │ Amount: $210.00         │
 │                         │
@@ -629,12 +693,26 @@ Don't forget! Gate opens at 6PM
 [View Ticket]
 ```
 
-**XFactor Voting:**
+**Talent Show Voting:**
 ```
 🗳️ XFactor Voting LIVE NOW!
 Semi-Final Round 2 has started
 You have 5 free votes
 [Vote Now]
+```
+
+```
+🌟 CGT Golden Buzzer Alert!
+Someone just got the Golden Buzzer!
+Voting opens in 30 minutes
+[Watch Now]
+```
+
+```
+🎤 Voice Blind Auditions!
+New coaches, new voices
+Chair turns happening now
+[Join Live]
 ```
 
 **New Events:**
@@ -711,8 +789,9 @@ Event Details
 │                         │
 │ Top Events:             │
 │ 1. XFactor Final (623)  │
-│ 2. NYE Concert (412)    │
-│ 3. Comedy Show (234)    │
+│ 2. CGT Semi-Final (456) │
+│ 3. Voice Battles (389)  │
+│ 4. NYE Concert (234)    │
 │                         │
 │ [Detailed Analytics →]  │
 └─────────────────────────┘
@@ -736,6 +815,42 @@ Event Details
 - Support ticket system
 
 ---
+
+## Venue Capacity Reference
+
+### Typical Cambodia Venue Sizes
+To ensure realistic planning and capacity management:
+
+**Large Venues (3,000-5,000 capacity)**
+- Olympic Stadium (Concert Area): 5,000
+- Koh Pich Convention Center: 4,000
+- Diamond Island Hall: 3,500
+
+**Medium Venues (1,500-3,000 capacity)**
+- Koh Pich Theatre: 2,500
+- RUPP Auditorium: 2,000
+- Chaktomuk Theatre: 1,800
+- Hard Rock Cafe: 1,500
+
+**Small Venues (500-1,500 capacity)**
+- Factory Phnom Penh: 1,000
+- Cloud Lounge: 800
+- Exchange Bar: 600
+- Show Box: 500
+
+**Event Categories by Venue Size**
+- Superstar Concerts: Large venues (3,000-5,000)
+- Popular Artists: Medium venues (1,500-3,000)
+- Rising Stars: Small venues (500-1,500)
+- Exclusive/VIP Events: Small venues with premium pricing
+
+---
+
+## Multi-Show Streaming Infrastructure
+
+> **Comprehensive Streaming Guide**: For detailed streaming infrastructure, encoding solutions, CDN setup, and technical implementation for all talent shows and live events, see [STREAMING_INFRASTRUCTURE.md](../technical/STREAMING_INFRASTRUCTURE.md)
+
+> **Show-Specific Architecture**: For talent show implementations and voting mechanics, see [TALENT_SHOWS_FRAMEWORK.md](../TALENT_SHOWS_FRAMEWORK.md)
 
 ## Technical Implementation Notes
 

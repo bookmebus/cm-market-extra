@@ -25,12 +25,12 @@ Opens app → Splash screen (2 sec)
 │  Welcome to Hang Meas   │
 │  Your Entertainment Hub │
 │                         │
-│  🎫 Concerts           │
-│  🎭 Shows              │
-│  🌟 XFactor            │
+│  🎫 Concerts            │
+│  🎭 Shows               │
+│  🌟 XFactor             │
 │                         │
 │  [Create Account]       │
-│  [Browse as Guest]     │
+│  [Browse as Guest]      │
 └─────────────────────────┘
 
 Taps "Create Account"
@@ -112,31 +112,37 @@ Success animation plays ✓
 
 ---
 
-### Journey 2: Regular User Voting on XFactor
+### Journey 2: Regular User Voting on Talent Shows
 
-**User Profile:** Visal, 22, University student, XFactor superfan
+**User Profile:** Visal, 22, University student, Multi-show superfan (follows XFactor, CGT, and Voice)
 
-**Saturday Night - Live Show:**
+**Saturday Night - XFactor Live Show:**
 
 #### 1. Pre-Show Preparation (6:30 PM)
 ```
 Push notification arrives:
 "XFactor starts in 30 min! 🎤"
+"Voice auditions Tuesday! 🎤"
+"CGT Golden Buzzer tonight! 🎆"
 
 Opens app → Already logged in
 → XFactor tab highlighted red
 → Taps to enter XFactor section
 
 ┌─────────────────────────┐
-│  Tonight: Semi-Final    │
+│  Tonight: XFactor Final │
 │  Starts: 7:00 PM        │
 │                         │
-│  Your Favorites:        │
+│  Active Shows:          │
+│  🎵 XFactor (LIVE NOW) │
+│  🎪 CGT (Next week)    │
+│  🎤 Voice (Auditions)  │
+│                         │
+│  XFactor Favorites:     │
 │  ⭐ Dara (voted 47x)    │
 │  ⭐ Sophea (voted 12x)  │
 │                         │
-│  Free votes ready: 5    │
-│  Paid votes: 23 left    │
+│  Universal votes: 23    │
 └─────────────────────────┘
 ```
 
@@ -163,7 +169,7 @@ Screen changes automatically:
 │  Time left: 29:45       │
 ├─────────────────────────┤
 │  Quick Vote:            │
-│  [DARA] [SOPHEA] [VIRA]│
+│  [DARA] [SOPHEA] [VIRA] │
 ├─────────────────────────┤
 │  Or select below:       │
 └─────────────────────────┘
@@ -180,13 +186,15 @@ Free votes exhausted
 → Taps button
 
 ┌─────────────────────────┐
-│  Quick Buy - Fast Lane  │
-│  ⚡ 20 votes - $1.99    │
+│  Multi-Show Votes       │
+│  ⚡ 20 votes - $1.99     │
+│  Works on all shows     │
 │  [One-tap purchase]     │
 └─────────────────────────┘
 
 Uses saved payment method
-→ Instantly gets 20 votes
+→ Instantly gets 20 universal votes
+→ Can use on XFactor, CGT, or Voice
 → Continues voting for Dara
 ```
 
@@ -197,7 +205,7 @@ Voting closes → Wait screen
 → Results reveal:
 
 1. Sophea - 45,234 (38%)
-2. Dara - 43,122 (36%) 
+2. Dara - 43,122 (36%)
 3. Vira - 31,644 (26%)
 
 "Dara is SAFE! ✓"
@@ -205,7 +213,7 @@ Voting closes → Wait screen
 → Share button appears
 ```
 
-**Total Engagement:** 2 hours
+**Total Multi-Show Engagement:** 2 hours XFactor + checking other shows
 
 ---
 
@@ -220,9 +228,9 @@ Logs in → Taps menu
 
 ┌─────────────────────────┐
 │  Group Size?            │
-│  ◯ 10-20               │
-│  ◯ 20-50               │
-│  ⦿ 50+                 │
+│  ◯ 10-20                │
+│  ◯ 20-50                │
+│  ⦿ 50+                  │
 │  [Continue]             │
 └─────────────────────────┘
 ```
@@ -315,7 +323,7 @@ Selects Apsara show
   - English program
   - Photo opportunity
 
-Payment: 
+Payment:
 → Visa card accepted
 → Shows price in USD/AUD
 → No foreign fee notice
@@ -336,23 +344,25 @@ Includes:
 
 ---
 
-### Journey 5: Super Fan Season Pass Experience
+### Journey 5: Multi-Show Super Fan Experience
 
-**User Profile:** Chamroeun, Music enthusiast with season pass
+**User Profile:** Chamroeun, Entertainment enthusiast with multi-show pass
 
-#### 1. Season Pass Purchase (January)
+#### 1. Multi-Show Pass Purchase (January)
 ```
 New Year promotion seen
-→ "2025 Concert Pass"
-→ Unlimited concerts
-→ $299/year (save $500+)
+→ "2025 Entertainment Pass"
+→ All concerts + talent shows
+→ $399/year (save $800+)
 
 Benefits shown:
 ✓ All Hang Meas concerts
-✓ Priority booking
-✓ 20% off merchandise  
+✓ XFactor/CGT/Voice VIP access
+✓ Priority booking all shows
+✓ 25% off merchandise  
 ✓ Meet & greet chances
-✓ Exclusive events
+✓ Cross-show exclusive events
+✓ Universal voting credits
 ```
 
 #### 2. Using Pass Benefits (March)
@@ -367,24 +377,26 @@ Opens app → VIP badge shown
 → "Season Pass Applied ✓"
 ```
 
-#### 3. Loyalty Rewards (June)
+#### 3. Multi-Show Loyalty Rewards (June)
 ```
-Attended 10 concerts
-→ Unlocks "Super Fan" status
-→ Special perks:
-  - Artist video messages
-  - Signed merchandise
-  - +1 free ticket/month
-  - Backstage tour lottery
+Attended 10 concerts + voted in all shows
+→ Unlocks "Ultimate Fan" status
+→ Cross-show perks:
+  - Artist/contestant video messages
+  - Multi-show signed merchandise
+  - +2 free tickets/month any show
+  - Backstage access to all shows
+  - Judge/coach meet opportunities
 ```
 
-#### 4. Renewal Incentive (November)
+#### 4. Multi-Show Renewal Incentive (November)
 ```
-"Season Pass Expiring"
-→ Shows savings: $623
-→ Events attended: 24
-→ Renewal offer: $249
-→ Keep Super Fan status
+"Entertainment Pass Expiring"
+→ Shows total savings: $943
+→ Events attended: 24 concerts + 8 show tapings
+→ Votes cast: 2,847 across all shows
+→ Renewal offer: $299 (25% off)
+→ Keep Ultimate Fan status
 ```
 
 ---
@@ -397,7 +409,7 @@ User selecting ABA payment
 → QR code expires (5 min)
 
 ┌─────────────────────────┐
-│  ⚠️ Payment Timeout      │
+│  ⚠️ Payment Timeout     │
 │                         │
 │  Your seats are held    │
 │  for 8 more minutes     │
@@ -413,7 +425,7 @@ User tries buying same show
 → System detects existing tickets
 
 ┌─────────────────────────┐
-│  ℹ️ Already Purchased    │
+│  ℹ️ Already Purchased   │
 │                         │
 │  You have 2 tickets for │
 │  this event             │
@@ -429,7 +441,7 @@ During XFactor voting
 → Connection lost
 
 ┌─────────────────────────┐
-│  📵 Connection Lost      │
+│  📵 Connection Lost     │
 │                         │
 │  Your votes are saved   │
 │  Retrying...            │
