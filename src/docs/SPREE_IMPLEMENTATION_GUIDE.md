@@ -81,7 +81,7 @@ class CreateTalentShowSystem < ActiveRecord::Migration[7.0]
   def change
     # Universal talent show structure
     create_table :talent_shows do |t|
-      t.string :show_type, null: false # 'xfactor', 'cgt', 'voice'
+      t.string :show_type, null: false # 'XFACTOR', 'CGT', 'VOICE'
       t.string :name, null: false
       t.text :description
       t.string :logo_url
@@ -278,18 +278,92 @@ end
 
 ## 🎫 Multi-Show Talent Show Integration with Spree
 
+### 🏗️ Unified Talent Show Framework
+
+#### **Base Classes for All Shows**
+```ruby
+# app/models/concerns/talent_show_base.rb
+module TalentShowBase
+  extend ActiveSupport::Concern
+
+  included do
+    validates :show_type, presence: true
+    
+    def voting_window_minutes
+      config_value(:voting_window) || 30
+    end
+    
+    def free_votes_limit
+      config_value(:free_votes_per_episode) || 5
+    end
+    
+    def stages
+      config_value(:stages) || []
+    end
+    
+    private
+    
+    def config_value(key)
+      show_config[key.to_s] || show_config[key.to_sym]
+    end
+  end
+end
+
+# app/services/talent_shows/base_service.rb
+module TalentShows
+  class BaseService
+    attr_reader :show, :user
+    
+    def initialize(show, user = nil)
+      @show = show
+      @user = user
+    end
+    
+    protected
+    
+    def show_type
+      show.show_type
+    end
+    
+    def validate_voting_window(episode)
+      current_time = Time.current
+      unless current_time.between?(episode.voting_start, episode.voting_end)
+        raise VotingWindowError, "Voting is not open for this episode"
+      end
+    end
+    
+    def validate_vote_limits(episode, vote_count, vote_type)
+      return true unless vote_type == 'free'
+      
+      existing_votes = user.talent_show_votes
+                          .where(episode: episode, vote_type: 'free')
+                          .sum(:vote_count)
+      
+      if existing_votes + vote_count > show.free_votes_limit
+        raise VoteLimitExceededError, "Free vote limit exceeded"
+      end
+    end
+  end
+  
+  class VotingWindowError < StandardError; end
+  class VoteLimitExceededError < StandardError; end
+end
+```
+
 ### 🗳️ Universal Voting System Implementation
 
 #### **1. Talent Show Models**
 ```ruby
 # app/models/talent_show.rb
 class TalentShow < ApplicationRecord
+  include TalentShowBase
+  
   has_many :talent_show_seasons, dependent: :destroy
   has_many :episodes, through: :talent_show_seasons
   has_many :contestants, through: :talent_show_seasons
   has_many :votes, through: :contestants
   
-  validates :show_type, presence: true, inclusion: { in: %w[xfactor cgt voice] }
+  validates :show_type, presence: true, inclusion: { in: %w[XFACTOR CGT VOICE] }
   validates :name, presence: true
   
   enum status: { upcoming: 0, active: 1, completed: 2 }
@@ -300,12 +374,28 @@ class TalentShow < ApplicationRecord
   # Show-specific configuration
   def show_config
     case show_type
-    when 'xfactor'
-      { categories: %w[Boys Girls Groups Over25s], elimination_style: 'weekly' }
-    when 'cgt'
-      { categories: %w[Singing Dancing Comedy Magic Other], golden_buzzer: true }
-    when 'voice'
-      { categories: %w[Team1 Team2 Team3 Team4], blind_auditions: true }
+    when 'XFACTOR'
+      { 
+        categories: %w[boys girls groups over_25],
+        stages: %w[auditions bootcamp six_chair_challenge judges_houses live_shows finale],
+        voting_window: 30,
+        free_votes_per_episode: 5
+      }
+    when 'CGT'
+      { 
+        act_categories: %w[singing dancing magic_illusion comedy acrobatics instruments unique_acts],
+        stages: %w[open_auditions judge_auditions semi_finals finals],
+        golden_buzzer: true,
+        free_votes_per_episode: 10
+      }
+    when 'VOICE'
+      { 
+        stages: %w[blind_auditions battle_rounds knockouts live_playoffs live_shows finale],
+        coach_teams: true,
+        team_size: 12,
+        steal_limit: 2,
+        free_votes_per_episode: 10
+      }
     end
   end
 end
@@ -382,7 +472,7 @@ class TalentShowVote < ApplicationRecord
   
   validates :vote_type, inclusion: { in: %w[free paid sms] }
   validates :vote_count, presence: true, numericality: { greater_than: 0 }
-  validates :show_type, inclusion: { in: %w[xfactor cgt voice] }
+  validates :show_type, inclusion: { in: %w[XFACTOR CGT VOICE] }
   
   before_create :check_voting_limits
   after_create :deduct_vote_balance, :award_loyalty_points
@@ -396,9 +486,9 @@ class TalentShowVote < ApplicationRecord
     if vote_type == 'free'
       # Show-specific free vote limits
       limit = case show_type
-              when 'xfactor' then 5
-              when 'cgt' then 3  # Lower limit for CGT
-              when 'voice' then 10 # Higher for Voice due to more contestants
+              when 'XFACTOR' then 5
+              when 'CGT' then 10  # Higher limit for variety show
+              when 'VOICE' then 10 # Higher for Voice due to team-based voting
               else 5
               end
               
@@ -439,15 +529,99 @@ class TalentShowVote < ApplicationRecord
     # Multi-show bonus points
     base_points = vote_count
     multiplier = case show_type
-                 when 'xfactor' then 1.0
-                 when 'cgt' then 1.2  # Bonus for CGT
-                 when 'voice' then 1.1 # Small bonus for Voice
+                 when 'XFACTOR' then 1.0
+                 when 'CGT' then 1.2 # Bonus for CGT variety acts
+                 when 'VOICE' then 1.1 # Small bonus for Voice
                  else 1.0
                  end
                  
     points = (base_points * multiplier).to_i
     user.increment(:loyalty_points, points)
     user.save
+  end
+end
+
+# app/services/talent_shows/voting_service.rb
+module TalentShows
+  class VotingService < BaseService
+    def cast_vote(params)
+      episode = TalentShowEpisode.find(params[:episode_id])
+      contestant = Contestant.find(params[:contestant_id])
+      
+      # Validate show type match
+      unless contestant.show_type == show.show_type
+        return OpenStruct.new(
+          success?: false,
+          errors: ['Contestant does not belong to this show']
+        )
+      end
+      
+      # Validate voting window
+      begin
+        validate_voting_window(episode)
+        validate_vote_limits(episode, params[:vote_count].to_i, params[:vote_type])
+      rescue => e
+        return OpenStruct.new(
+          success?: false,
+          errors: [e.message]
+        )
+      end
+      
+      # Create vote
+      vote = TalentShowVote.new(
+        user: user,
+        contestant: contestant,
+        episode: episode,
+        show_type: show.show_type,
+        vote_type: params[:vote_type],
+        vote_count: params[:vote_count].to_i,
+        ip_address: params[:ip_address],
+        metadata: build_vote_metadata(params)
+      )
+      
+      if vote.save
+        # Broadcast real-time update
+        broadcast_vote_update(episode)
+        
+        OpenStruct.new(
+          success?: true,
+          vote: vote,
+          remaining_votes: calculate_remaining_votes(episode),
+          message: 'Vote cast successfully'
+        )
+      else
+        OpenStruct.new(
+          success?: false,
+          errors: vote.errors.full_messages
+        )
+      end
+    end
+    
+    private
+    
+    def build_vote_metadata(params)
+      {
+        device_type: params[:device_type],
+        app_version: params[:app_version],
+        timestamp: Time.current
+      }
+    end
+    
+    def calculate_remaining_votes(episode)
+      if user.store_credits.wallet_balance('VOTES').positive?
+        user.store_credits.wallet_balance('VOTES').to_i
+      else
+        limit = show.free_votes_limit
+        used = user.talent_show_votes
+                  .where(episode: episode, vote_type: 'free')
+                  .sum(:vote_count)
+        [limit - used, 0].max
+      end
+    end
+    
+    def broadcast_vote_update(episode)
+      VotingResultsBroadcastJob.perform_later(episode.id)
+    end
   end
 end
 ```
@@ -702,69 +876,132 @@ module Api::V1::Hangmeas
   end
 end
 
-# app/controllers/api/v1/hangmeas/voting_controller.rb
+# app/controllers/api/v1/hangmeas/shows_controller.rb
 module Api::V1::Hangmeas
-  class VotingController < Spree::Api::BaseController
+  class ShowsController < Spree::Api::BaseController
     before_action :authenticate_spree_user!
+    before_action :set_show_type
+    before_action :set_show
     
-    def current_episode
-      episode = Xfactor::Episode.joins(:season)
-                                .where(xfactor_seasons: { status: :active })
-                                .where('voting_start <= ? AND voting_end >= ?', 
-                                      Time.current, Time.current)
-                                .first
-      
-      if episode
-        render json: {
-          episode: episode_json(episode),
-          contestants: contestants_json(episode),
-          user_votes: user_votes_json(episode),
-          voting_status: voting_status(episode)
-        }
-      else
-        render json: { error: 'No active voting' }, status: 404
-      end
-    end
-    
-    def cast_vote
-      vote = Xfactor::Vote.new(vote_params.merge(
-        user: current_spree_user,
-        ip_address: request.remote_ip
-      ))
-      
-      if vote.save
-        render json: { 
-          success: true,
-          vote_id: vote.id,
-          remaining_votes: remaining_vote_balance
-        }
-      else
-        render json: { errors: vote.errors }, status: 422
-      end
-    end
-    
-    def results
-      episode = Xfactor::Episode.find(params[:episode_id])
+    # GET /api/v1/shows/:show_type/current
+    def current
+      season = @show.talent_show_seasons.current
       
       render json: {
+        show: show_json(@show),
+        season: season_json(season),
+        active_episode: active_episode_json(season)
+      }
+    end
+    
+    # GET /api/v1/shows/:show_type/contestants
+    def contestants
+      season = @show.talent_show_seasons.current
+      contestants = season.contestants.includes(show_specific_includes)
+      
+      render json: {
+        show_type: @show_type,
+        season_id: season.id,
+        contestants: contestants.map { |c| contestant_json(c) }
+      }
+    end
+    
+    # POST /api/v1/shows/:show_type/vote
+    def vote
+      service = TalentShows::VotingService.new(@show, current_spree_user)
+      result = service.cast_vote(vote_params)
+      
+      if result.success?
+        render json: { 
+          success: true,
+          vote_id: result.vote.id,
+          remaining_votes: result.remaining_votes,
+          message: result.message
+        }
+      else
+        render json: { errors: result.errors }, status: 422
+      end
+    end
+    
+    # GET /api/v1/shows/:show_type/results/:episode_id
+    def results
+      episode = TalentShowEpisode.find(params[:episode_id])
+      
+      render json: {
+        show_type: @show_type,
         episode_id: episode.id,
         total_votes: episode.total_votes,
-        results: episode.contestants.map do |contestant|
-          {
-            contestant_id: contestant.id,
-            name: contestant.name,
-            vote_count: contestant.vote_count_for_episode(episode),
-            percentage: contestant.percentage_for_episode(episode)
-          }
-        end,
+        results: build_results(episode),
+        voting_open: episode.voting_open?,
         last_updated: Time.current
       }
     end
     
     private
     
+    def set_show_type
+      @show_type = params[:show_type].upcase
+      unless %w[XFACTOR CGT VOICE].include?(@show_type)
+        render json: { error: 'Invalid show type' }, status: 400
+      end
+    end
+    
+    def set_show
+      @show = TalentShow.by_type(@show_type).first
+      unless @show
+        render json: { error: 'Show not found' }, status: 404
+      end
+    end
+    
     def vote_params
       params.require(:vote).permit(:contestant_id, :episode_id, :vote_type, :vote_count)
+    end
+    
+    def show_specific_includes
+      case @show_type
+      when 'XFACTOR'
+        :xfactor_contestant_data
+      when 'CGT'
+        :cgt_contestant_data
+      when 'VOICE'
+        :voice_contestant_data
+      else
+        []
+      end
+    end
+    
+    def contestant_json(contestant)
+      base_data = {
+        id: contestant.id,
+        name: contestant.name,
+        khmer_name: contestant.khmer_name,
+        photo_url: contestant.photo_url,
+        hometown: contestant.hometown,
+        age: contestant.age,
+        status: contestant.status
+      }
+      
+      # Add show-specific data
+      case @show_type
+      when 'XFACTOR'
+        base_data.merge!(
+          category: contestant.xfactor_contestant_data&.category,
+          mentor_judge: contestant.xfactor_contestant_data&.mentor_judge
+        )
+      when 'CGT'
+        base_data.merge!(
+          act_type: contestant.cgt_contestant_data&.act_type,
+          act_description: contestant.cgt_contestant_data&.act_description,
+          golden_buzzer: contestant.cgt_contestant_data&.golden_buzzer_judge.present?
+        )
+      when 'VOICE'
+        base_data.merge!(
+          coach: contestant.voice_contestant_data&.coach,
+          chair_turned_by: contestant.voice_contestant_data&.chair_turned_by
+        )
+      end
+      
+      base_data
     end
   end
 end
@@ -1197,11 +1434,27 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :hangmeas do
-        resources :voting, only: [] do
-          collection do
-            get :current_episode
-            post :cast_vote
-            get :results
+        # Unified talent shows routes
+        scope 'shows/:show_type', constraints: { show_type: /XFACTOR|CGT|VOICE/i } do
+          get 'current', to: 'shows#current'
+          get 'contestants', to: 'shows#contestants'
+          post 'vote', to: 'shows#vote'
+          get 'results/:episode_id', to: 'shows#results'
+          
+          # Show-specific routes
+          scope module: :shows do
+            # XFactor specific
+            get 'categories', to: 'xfactor#categories', constraints: { show_type: /XFACTOR/i }
+            get 'six-chair-status', to: 'xfactor#six_chair_status', constraints: { show_type: /XFACTOR/i }
+            
+            # CGT specific
+            get 'acts/types', to: 'cgt#act_types', constraints: { show_type: /CGT/i }
+            post 'golden-buzzer', to: 'cgt#golden_buzzer', constraints: { show_type: /CGT/i }
+            
+            # Voice specific
+            post 'chair-turn', to: 'voice#chair_turn', constraints: { show_type: /VOICE/i }
+            get 'teams', to: 'voice#teams', constraints: { show_type: /VOICE/i }
+            post 'steal', to: 'voice#steal', constraints: { show_type: /VOICE/i }
           end
         end
         
@@ -1210,6 +1463,14 @@ Rails.application.routes.draw do
             get :balance
             post :transfer
             get :history
+            post :topup
+          end
+        end
+        
+        resources :subscriptions, only: [:index, :create] do
+          member do
+            post :cancel
+            post :resume
           end
         end
         
@@ -1220,4 +1481,40 @@ Rails.application.routes.draw do
 end
 ```
 
-This implementation guide provides a solid foundation for extending your existing Spree Commerce setup into a comprehensive super app that includes XFactor voting, enhanced wallet functionality, subscription management, and loyalty programs while leveraging your current store credit system.
+## 🎯 Summary of Updates
+
+This updated Spree implementation now provides:
+
+### ✅ Consistent Multi-Show Architecture
+- **Unified API structure** following `/api/v1/shows/:show_type/` pattern
+- **Base classes** for shared functionality across all shows
+- **Show-specific extensions** for unique features
+
+### ✅ Database Consistency
+- All shows use the same base tables with show-specific extension tables
+- Consistent use of UPPERCASE show type constants (XFACTOR, CGT, VOICE)
+- Unified voting system with show-specific metadata
+
+### ✅ Feature Parity
+- **All shows** have voting implementation
+- **Consistent free vote limits**: XFactor (5), CGT (10), Voice (10)
+- **Loyalty points** awarded across all shows with multipliers
+
+### ✅ API Endpoints
+- **Common endpoints** for all shows:
+  - `GET /api/v1/shows/:show_type/current`
+  - `GET /api/v1/shows/:show_type/contestants`
+  - `POST /api/v1/shows/:show_type/vote`
+  - `GET /api/v1/shows/:show_type/results/:episode_id`
+
+- **Show-specific endpoints**:
+  - XFactor: `/categories`, `/six-chair-status`
+  - CGT: `/acts/types`, `/golden-buzzer`
+  - Voice: `/chair-turn`, `/teams`, `/steal`
+
+### ✅ Configuration-Driven Approach
+- Each show's configuration is centralized in the `show_config` method
+- Easy to add new shows by extending the pattern
+- Consistent handling of show-specific features
+
+This implementation ensures consistency across all three talent show types while maintaining their unique features, making it easier to maintain and extend in the future.
