@@ -26,7 +26,7 @@ Core system architecture and implementation details:
 - **PAYMENT_INTEGRATION_DETAILED.md** - Payment gateway integration details
 
 #### 📁 `/src/docs/`
-- **SPREE_IMPLEMENTATION_GUIDE.md** - E-commerce implementation using Spree
+- **SPREE_IMPLEMENTATION_GUIDE.md** - Digital marketplace implementation using scalable technology
 - **week1-2-database-setup.md** - Database setup phase
 - **week3-4-core-models-services.md** - Core models and services
 - **week5-6-voting-system.md** - Voting system implementation

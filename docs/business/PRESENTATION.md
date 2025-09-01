@@ -53,7 +53,7 @@ Just as WeChat transformed from messaging to China's everything app, Hang Meas w
 │                    HANG MEAS SUPER APP                      │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  🎫 CORE SERVICES          🛍️ COMMERCE LAYER                 │
+│  🎫 CORE SERVICES          🛍️ MARKETPLACE LAYER               │
 │  ├─ Event Ticketing       ├─ Artist Merchandise             │
 │  ├─ Multi-Show Voting     ├─ Concert Memorabilia           │
 │  ├─ Live Streaming        ├─ Fashion & Lifestyle           │
@@ -194,7 +194,7 @@ STD │ 🟢🟢🟢🟢🟢🟢🟢🟢 │ $30
 Total Year 1:           $1.6M
 ```
 
-#### **Phase 2: Commerce Expansion (Year 2-3)**
+#### **Phase 2: Marketplace Expansion (Year 2-3)**
 ```
 🛍️ Merchandise Sales:    $1.8M  (Starting small, 60% margin)
 💰 Digital Wallet:       $1.2M  (Building user trust)
@@ -220,7 +220,7 @@ Total Year 5:           $15.2M (40% growth)
 #### **5-Year Revenue Projection**
 ```
 Year 1:  $1.6M   (MVP - Limited concerts + XFactor)
-Year 2:  $5.5M   (Commerce + Early Wallet)
+Year 2:  $5.5M   (Marketplace + Early Wallet)
 Year 3:  $8.2M   (Growing subscriptions)
 Year 4:  $10.8M  (Financial Services)
 Year 5:  $15.2M  (Mature Super App)
@@ -456,7 +456,7 @@ Just as WeChat became indispensable in China by combining messaging, payments, a
 ✅ **Mobile-first population** - 95% smartphone penetration  
 ✅ **Young demographics** - 65% under 35 years old  
 ✅ **Limited banking** - Digital wallets can fill the gap  
-✅ **Social commerce culture** - People buy through social apps  
+✅ **Social engagement culture** - People engage through social apps  
 ✅ **Entertainment hungry** - High demand for local content  
 
 #### **The Network Effect Advantage**

@@ -1,7 +1,7 @@
 # 🗄️ Week 1-2: Database Setup and Migration Guide
 
 ## 🎯 Overview
-This phase focuses on setting up the database schema and migrations for the Hangmeas Super App, extending Spree Commerce with custom tables and fields.
+This phase focuses on setting up the database schema and migrations for the Hangmeas Super App, extending scalable technology with custom tables and fields.
 
 ---
 

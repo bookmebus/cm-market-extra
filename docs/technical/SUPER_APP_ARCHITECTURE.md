@@ -1,5 +1,5 @@
 # 🚀 Hang Meas Super App Architecture
-## Complete Ecosystem for Entertainment, Commerce & Subscriptions
+## Complete Ecosystem for Entertainment, Digital Platform & Subscriptions
 
 ---
 
@@ -11,7 +11,7 @@
 │                    HANG MEAS SUPER APP                      │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  🎫 CORE SERVICES          🛍️ COMMERCE LAYER                │
+│  🎫 CORE SERVICES          🛍️ DIGITAL MARKETPLACE           │
 │  ├─ Event Ticketing       ├─ Artist Merchandise            │
 │  ├─ Multi-Show Voting     ├─ Concert Memorabilia           │
 │  ├─ Live Streaming        ├─ Fashion & Lifestyle           │
@@ -47,7 +47,7 @@
     │                      │                      │
     ▼                      ▼                      ▼
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   CORE      │    │  COMMERCE   │    │ CONTENT     │
+│   CORE      │    │ MARKETPLACE │    │ CONTENT     │
 │  SERVICES   │    │  SERVICES   │    │ SERVICES    │
 ├─────────────┤    ├─────────────┤    ├─────────────┤
 │• User Mgmt  │    │• Product    │    │• Streaming  │
@@ -98,7 +98,7 @@
 
 ---
 
-## 🛍️ Merchandise & E-commerce Structure
+## 🛍️ Merchandise & Digital Marketplace Structure
 
 ### 🏪 Product Catalog Architecture
 
@@ -930,8 +930,8 @@ const p2pTransfer = {
 - 🆕 Basic merchandise catalog
 - 🆕 Simple subscription tiers
 
-#### **Phase 2: Commerce Expansion (Months 7-12)**
-- 🆕 Advanced e-commerce features
+#### **Phase 2: Marketplace Expansion (Months 7-12)**
+- 🆕 Advanced digital marketplace features
 - 🆕 Inventory management
 - 🆕 Shipping integration
 - 🆕 Customer service tools
@@ -961,7 +961,7 @@ const p2pTransfer = {
 ### 📊 5-Year Revenue Forecast
 ```
 Year 1: $1.6M   (Ticketing + Multi-Show Voting)
-Year 2: $5.5M   (Early E-commerce + Subscriptions)
+Year 2: $5.5M   (Early Digital Marketplace + Subscriptions)
 Year 3: $8.2M   (Growing Financial Services)
 Year 4: $10.8M  (Marketplace Development)
 Year 5: $15.2M  (Ecosystem Maturity)
@@ -971,7 +971,7 @@ Total 5-Year Revenue: $41.3M
 
 ### 🎯 Market Positioning
 **Vision**: Become the WeChat of Southeast Asia entertainment
-**Mission**: One app for all entertainment, commerce, and financial needs
+**Mission**: One app for all entertainment, marketplace, and financial needs
 **Talent Show Dominance**: Support for XFactor, Cambodia's Got Talent, and The Voice Cambodia
 **Goal**: 70% market share in Cambodia's entertainment digital economy
 

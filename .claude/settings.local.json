@@ -5,7 +5,9 @@
       "Bash(mv:*)",
       "Bash(find:*)",
       "Bash(rm:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:www.linkedin.com)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }

@@ -1,7 +1,7 @@
 # 📚 Week 3-4: Core Models and Services Implementation
 
 ## 🎯 Overview
-This phase focuses on implementing the core models and services that form the foundation of the Hangmeas Super App, building on top of Spree Commerce.
+This phase focuses on implementing the core models and services that form the foundation of the Hangmeas Super App, building on top of scalable technology.
 
 ---
 
